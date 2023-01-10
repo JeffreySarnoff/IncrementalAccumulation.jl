@@ -1,0 +1,21 @@
+name = "IncrementalAccumulators"
+uuid = "bc631eba-96a2-459e-9fa3-2be216e47de0"
+authors = ["Jeffrey Sarnoff <jeffrey.sarnoff@gmail.com>",]
+version = "0.1.0"
+license = "MIT"
+
+[deps]
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+VectorizedStatistics = "3b853605-1c98-4422-8364-4bd93ee0529e"
+
+[compat]
+StatsBase = "0.33, 0.34, 0.35, 0.36"
+VectorizedStatistics = "0.4, 0.5, 0.6, 0.7"
+julia = "1.8"
+
+[extras]
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["StatsBase", "Test"]
