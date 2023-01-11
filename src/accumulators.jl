@@ -9,7 +9,7 @@
 
 # Count
 
-mutable struct AccCount{T,F} <: Acculator{T,F}
+mutable struct AccCount{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     fn::F           # preapply to each element when observed
 end
@@ -34,7 +34,7 @@ end
 
 # Minimum
 
-mutable struct AccMinimum{T,F} <: Acculator{T,F}
+mutable struct AccMinimum{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     nmin::Int       # count distinct minima
     min::T          # current minimum
@@ -72,7 +72,7 @@ end
 
 # Maximum
 
-mutable struct AccMaximum{T,F} <: Acculator{T,F}
+mutable struct AccMaximum{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     nmax::Int       # count distinct maxima
     max::T          # current maximum
@@ -110,7 +110,7 @@ end
 
 # Extrema
 
-mutable struct AccExtrema{T,F} <: Acculator{T,F}
+mutable struct AccExtrema{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     nmin::Int       # count distinct minima
     nmax::Int       # count distinct maxima
@@ -158,7 +158,7 @@ end
 
 # Sum
 
-mutable struct AccSum{T,F} <: Acculator{T,F}
+mutable struct AccSum{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     sum::T          # current sum
     fn::F
@@ -189,7 +189,7 @@ end
 
 # Prod
 
-mutable struct AccProd{T,F} <: Acculator{T,F}
+mutable struct AccProd{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     prod::T         # current product
     fn::F
@@ -220,7 +220,7 @@ end
 
 # Mean
 
-mutable struct AccMean{T,F} <: Acculator{T,F}
+mutable struct AccMean{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     mean::T         # current mean
     fn::F
@@ -251,7 +251,7 @@ end
 
 # GeoMean
 
-mutable struct AccGeoMean{T,F} <: Acculator{T,F}
+mutable struct AccGeoMean{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     sumlog::T       # ∑(i=1:nobs) log(xᵢ)
     fn::F
@@ -281,7 +281,7 @@ function (acc::AccGeoMean{T,F})(xs::Seq{T}) where {T,F}
 end
 
 # Harmonic Mean
-mutable struct AccHarmMean{T,F} <: Acculator{T,F}
+mutable struct AccHarmMean{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     invhmean::T     # 1 / current harmonic mean
     fn::F
@@ -312,7 +312,7 @@ end
 
 # Generalized Mean (defaults to Quadratic Mean [root-mean-squared])
 
-mutable struct AccGenMean{T,F} <: Acculator{T,F}
+mutable struct AccGenMean{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     gmean::T        # current mean((xᵢ)ᵖʷʳ), i=1:nobs
     const pwr::T    # power
@@ -346,7 +346,7 @@ end
 # Unbiased Sample Variation (with Mean)
 # see https://www.johndcook.com/blog/standard_deviation/
 
-mutable struct AccMeanAndVar{T,F} <: Acculator{T,F}
+mutable struct AccMeanAndVar{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     mean::T         # current mean
     svar::T         # sum of variances x[1:1=0,1:2,..,1:nobs]
@@ -381,7 +381,7 @@ function (acc::AccMeanAndVar{T,F})(xs::Seq{T}) where {T,F}
     accum
 end
 
-mutable struct AccMeanAndStd{T,F} <: Acculator{T,F}
+mutable struct AccMeanAndStd{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     mean::T         # current mean
     svar::T         # sum of variances x[1:1=0,1:2,..,1:nobs]
@@ -418,7 +418,7 @@ end
 
 # see https://www.johndcook.com/blog/skewness_kurtosis/
 
-mutable struct AccStats{T,F} <: Acculator{T,F}
+mutable struct AccStats{T,F} <: Accumulator{T,F}
     nobs::Int
     m1::T
     m2::T
@@ -464,7 +464,7 @@ Incremental calculation of weighted mean and variance
 by Tony Finch
 =#
 
-mutable struct AccExpWtMean{T,F} <: Acculator{T,F}
+mutable struct AccExpWtMean{T,F} <: Accumulator{T,F}
     nobs::Int
     alpha::T
     expwtmean::T
@@ -490,7 +490,7 @@ function (acc::AccExpWtMean{T,F})(xs::Seq{T}) where {T,F}
     accum
 end
 
-mutable struct AccExpWtMeanVar{T,F} <: Acculator{T,F}
+mutable struct AccExpWtMeanVar{T,F} <: Accumulator{T,F}
     nobs::Int
     alpha::T
     expwtmean::T
@@ -523,7 +523,7 @@ function (acc::AccExpWtMeanVar{T,F})(xs::Seq{T}) where {T,F}
     accum
 end
 
-mutable struct AccExpWtMeanStd{T,F} <: Acculator{T,F}
+mutable struct AccExpWtMeanStd{T,F} <: Accumulator{T,F}
     nobs::Int
     alpha::T
     expwtmean::T
@@ -556,8 +556,8 @@ function (acc::AccExpWtMeanStd{T,F})(xs::Seq{T}) where {T,F}
     accum
 end
 
-Base.length(@nospecialize acc::Acculator) = acc.nobs
-StatsBase.nobs(@nospecialize acc::Acculator) = acc.nobs
+Base.length(@nospecialize acc::Accumulator) = acc.nobs
+StatsBase.nobs(@nospecialize acc::Accumulator) = acc.nobs
 
 for (F,A) in ((:(Base.minimum), :AccMinimum), (:(Base.maximum), :AccMaximum), (:(Base.extrema), :AccExtrema),
               (:(Base.sum), :AccSum), (:(Base.prod), :AccProd),
