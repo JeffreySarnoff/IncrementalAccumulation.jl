@@ -24,12 +24,12 @@ end
      
 function (acc::AccCount{T,F})(x::T) where {T,F}
     acc.nobs += one(I)
-    accum
+    acc
 end
 
 function (acc::AccCount{T,T})(xs::Seq{T}) where {T,F}
     acc.nobs += length(xs)
-    accum
+    acc
 end
 
 # Minimum
@@ -56,7 +56,7 @@ function (acc::AccMinimum{T,F})(x::T) where {T,F}
         acc.nmin += 1
         acc.min = xx
     end
-    accum
+    acc
 end
 
 function (acc::AccMinimum{T,F})(xs::Seq{T}) where {T,F}
@@ -67,7 +67,7 @@ function (acc::AccMinimum{T,F})(xs::Seq{T}) where {T,F}
         acc.nmin += 1
         acc.min = x
     end
-    accum
+    acc
 end
 
 # Maximum
@@ -94,7 +94,7 @@ function (acc::AccMaximum{T,F})(x::T) where {T,F}
         acc.nmax += 1
         acc.max = xx
     end
-    accum
+    acc
 end
 
 function (acc::AccMaximum{T,F})(xs::Seq{T}) where {T,F}
@@ -105,7 +105,7 @@ function (acc::AccMaximum{T,F})(xs::Seq{T}) where {T,F}
         acc.nmax += 1
         acc.max = x
     end
-    accum
+    acc
 end
 
 # Extrema
@@ -138,7 +138,7 @@ function (acc::AccExtrema{T,F})(x::T) where {T,F}
         acc.nmax += 1
         acc.max = xx
     end
-    accum
+    acc
 end
 
 function (acc::AccExtrema{T,F})(xs::Seq{T}) where {T,F}
@@ -153,7 +153,7 @@ function (acc::AccExtrema{T,F})(xs::Seq{T}) where {T,F}
         acc.nmax += 1
         acc.max = mx
     end
-    accum
+    acc
 end
 
 # Sum
@@ -176,7 +176,7 @@ function (acc::AccSum{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.sum += xx
-    accum
+    acc
 end
 
 function (acc::AccSum{T,F})(xs::Seq{T}) where {T,F}
@@ -184,7 +184,7 @@ function (acc::AccSum{T,F})(xs::Seq{T}) where {T,F}
     acc.nobs += length(xs)
     x = vsum(xxs)
     acc.sum += x
-    accum
+    acc
 end
 
 # Prod
@@ -207,7 +207,7 @@ function (acc::AccProd{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.prod *= xx
-    accum
+    acc
 end
 
 function (acc::AccProd{T,F})(xs::Seq{T}) where {T,F}
@@ -215,7 +215,7 @@ function (acc::AccProd{T,F})(xs::Seq{T}) where {T,F}
     acc.nobs += length(xs)
     x = vprod(xxs)
     acc.prod *= x
-    accum
+    acc
 end
 
 # Mean
@@ -238,7 +238,7 @@ function (acc::AccMean{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.mean += (xx - acc.mean) / acc.nobs
-    accum
+    acc
 end
 
 function (acc::AccMean{T,F})(xs::Seq{T}) where {T,F}
@@ -246,7 +246,7 @@ function (acc::AccMean{T,F})(xs::Seq{T}) where {T,F}
     acc.nobs += length(xs)
     xmean = vmean(xxs)
     acc.mean += (xmean - acc.mean) / acc.nobs
-    accum
+    acc
 end
 
 # GeoMean
@@ -270,14 +270,14 @@ function (acc::AccGeoMean{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.sumlog += logabs(xx)
-    accum
+    acc
 end
 
 function (acc::AccGeoMean{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     acc.sumlog += sum(map(logabs, xxs))
-    accum
+    acc
 end
 
 # Harmonic Mean
@@ -300,14 +300,14 @@ function (acc::AccHarmMean{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.invhmean += one(T) / xx
-    accum
+    acc
 end
 
 function (acc::AccHarmMean{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     acc.invhmean += sum(map(inv, xxs))
-    accum
+    acc
 end
 
 # Generalized Mean (defaults to Quadratic Mean [root-mean-squared])
@@ -332,7 +332,7 @@ function (acc::AccGenMean{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.gmean += ((xx^acc.pwr) - acc.gmean) / acc.nobs
-    accum
+    acc
 end
 
 function (acc::AccGenMean{T,F})(xs::Seq{T}) where {T,F}
@@ -340,7 +340,7 @@ function (acc::AccGenMean{T,F})(xs::Seq{T}) where {T,F}
     acc.nobs += length(xs)     
     xmean = vmean(map(x->x^acc.pwr, xxs))
     acc.gmean += (xmean - acc.gmean) / acc.nobs
-    accum
+    acc
 end
 
 # Unbiased Sample Variation (with Mean)
@@ -368,7 +368,7 @@ function (acc::AccMeanAndVar{T,F})(x::T) where {T,F}
     prior_mean = acc.mean
     acc.mean = prior_mean + (xx - prior_mean) / acc.nobs
     acc.svar = acc.svar + (xx - prior_mean) * (xx - acc.mean)
-    accum
+    acc
 end
 
 function (acc::AccMeanAndVar{T,F})(xs::Seq{T}) where {T,F}
@@ -378,7 +378,7 @@ function (acc::AccMeanAndVar{T,F})(xs::Seq{T}) where {T,F}
     xmean = vmean(xxs)
     acc.mean += (xmean - prior_mean) / acc.nobs
     acc.svar = acc.svar + (xmean - prior_mean) * (xmean - acc.mean)
-    accum
+    acc
 end
 
 mutable struct AccMeanAndStd{T,F} <: Accumulator{T,F}
@@ -403,7 +403,7 @@ function (acc::AccMeanAndStd{T,F})(x::T) where {T,F}
     prior_mean = acc.mean
     acc.mean = prior_mean + (xx - prior_mean) / acc.nobs
     acc.svar = acc.svar + (xx - prior_mean) * (xx - acc.mean)
-    accum
+    acc
 end
 
 function (acc::AccMeanAndStd{T,F})(xs::Seq{T}) where {T,F}
@@ -413,7 +413,7 @@ function (acc::AccMeanAndStd{T,F})(xs::Seq{T}) where {T,F}
     xmean = vmean(xxs)
     acc.mean += (xmean - prior_mean) / acc.nobs
     acc.svar = acc.svar + (xmean - prior_mean) * (acc.mean - xmean)
-    accum
+    acc
 end
 
 # see https://www.johndcook.com/blog/skewness_kurtosis/
@@ -431,7 +431,7 @@ AccStats(::Type{T}=Float64; fn::F=identity) where {T,F} =
     AccStats(0, zero(T), zero(T), zero(T), zero(T), fn)
 
 function (acc::AccStats{T,F})() where {T,F}
-    (nobs=nobs(accum), mean=mean(accum), var=var(accum), std=std(accum), skewness=skewness(accum), kurtosis=kurtosis(accum))
+    (nobs=nobs(acc), mean=mean(acc), var=var(acc), std=std(acc), skewness=skewness(acc), kurtosis=kurtosis(acc))
 end
 
 function (acc::AccStats{T,F})(x) where {T,F}
@@ -452,9 +452,9 @@ end
 
 function (acc::AccStats{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
-        accum(xs[i])
+        acc(xs[i])
     end
-    accum
+    acc
 end
 
 #=
@@ -474,20 +474,20 @@ end
 AccExpWtMean(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
     AccExpWtMean{T,F}(0, T(alpha), zero(T), fn)
 
-(accum::AccExpWtMean{T,F})() where {T,F} = acc.expwtmean
+(acc::AccExpWtMean{T,F})() where {T,F} = acc.expwtmean
 
 function (acc::AccExpWtMean{T,F})(x) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     acc.expwtmean += acc.alpha * (xx - acc.expwtmean)
-    accum
+    acc
 end
 
 function (acc::AccExpWtMean{T,F})(xs::Seq{T}) where {T,F}
     for x in eachindex(xs)
-        accum(xs[i])
+        acc(xs[i])
     end
-    accum
+    acc
 end
 
 mutable struct AccExpWtMeanVar{T,F} <: Accumulator{T,F}
@@ -501,7 +501,7 @@ end
 AccExpWtMeanVar(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
     AccExpWtMeanVar(0, alpha, zero(T), zero(T), fn)
 
-function(accum::AccExpWtMeanVar{T,F})() where {T,F}
+function(acc::AccExpWtMeanVar{T,F})() where {T,F}
     unbiased_expwtvar = acc.expwtsvar / (acc.nobs - 1)
     (expwt_mean=acc.expwtmean, expwt_var=unbiased_expwtvar)
 end
@@ -513,14 +513,14 @@ function (acc::AccExpWtMeanVar{T,F})(x) where {T,F}
     incr = acc.alpha * diff
     acc.expwtmean += acc.alpha * (xx - acc.expwtmean)
     acc.expwtsvar = (one(T) - acc.alpha) * (acc.expwtsvar + diff * incr)
-    accum
+    acc
 end
 
 function (acc::AccExpWtMeanVar{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
-        accum(xs[i])
+        acc(xs[i])
     end
-    accum
+    acc
 end
 
 mutable struct AccExpWtMeanStd{T,F} <: Accumulator{T,F}
@@ -534,7 +534,7 @@ end
 AccExpWtMeanStd(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
     AccExpWtMeanStd(0, alpha, zero(T), zero(T), fn)
 
-function(accum::AccExpWtMeanStd{T,F})() where {T,F}
+function(acc::AccExpWtMeanStd{T,F})() where {T,F}
     unbiased_expwtstd = sqrt(acc.expwtsvar / (acc.nobs - 1))
     (expwt_mean=acc.expwtmean, expwt_std=unbiased_expwtstd)
 end
@@ -546,14 +546,14 @@ function (acc::AccExpWtMeanStd{T,F})(x) where {T,F}
     incr = acc.alpha * diff
     acc.expwtmean += acc.alpha * (xx - acc.expwtmean)
     acc.expwtsvar = (one(T) - acc.alpha) * (acc.expwtsvar + diff * incr)
-    accum
+    acc
 end
 
 function (acc::AccExpWtMeanStd{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
-        accum(xs[i])
+        acc(xs[i])
     end
-    accum
+    acc
 end
 
 Base.length(@nospecialize acc::Accumulator) = acc.nobs
@@ -562,31 +562,31 @@ StatsBase.nobs(@nospecialize acc::Accumulator) = acc.nobs
 for (F,A) in ((:(Base.minimum), :AccMinimum), (:(Base.maximum), :AccMaximum), (:(Base.extrema), :AccExtrema),
               (:(Base.sum), :AccSum), (:(Base.prod), :AccProd),
               (:(StatsBase.mean), :AccMean), (:(StatsBase.geomean), :AccGeoMean), (:(StatsBase.harmmean), :AccHarmMean))
-     @eval $F(accum::$A) = Acc()
+     @eval $F(acc::$A) = Acc()
 end
 
-Base.minimum(accum::AccExtrema) = acc.min
-Base.maximum(accum::AccExtrema) = acc.max
-midrange(accum::AccExtrema) = (acc.min / 2) + (acc.max / 2)
-proportionalrange(accum::AccExtrema, proportion) = (acc.min * proportion) + (acc.max * (1 - proportion))
+Base.minimum(acc::AccExtrema) = acc.min
+Base.maximum(acc::AccExtrema) = acc.max
+midrange(acc::AccExtrema) = (acc.min / 2) + (acc.max / 2)
+proportionalrange(acc::AccExtrema, proportion) = (acc.min * proportion) + (acc.max * (1 - proportion))
 
-nminima(accum::AccMinimum) = acc.nmin
-nminima(accum::AccExtrema) = acc.nmin
-nmaxima(accum::AccMinimum) = acc.nmax
-nmaxima(accum::AccExtrema) = acc.nmax
+nminima(acc::AccMinimum) = acc.nmin
+nminima(acc::AccExtrema) = acc.nmin
+nmaxima(acc::AccMinimum) = acc.nmax
+nmaxima(acc::AccExtrema) = acc.nmax
 
-StatsBase.mean(accum::AccMeanAndVar) = acc.mean
-StatsBase.var(accum::AccMeanAndVar) = acc.svar / (acc.nobs - 1)
-StatsBase.std(accum::AccMeanAndVar) = sqrt(acc.svar / (acc.nobs - 1))
-StatsBase.mean(accum::AccMeanAndStd) = acc.mean
-StatsBase.var(accum::AccMeanAndStd) = acc.svar / (acc.nobs - 1)
-StatsBase.std(accum::AccMeanAndStd) = sqrt(acc.svar / (acc.nobs - 1))
+StatsBase.mean(acc::AccMeanAndVar) = acc.mean
+StatsBase.var(acc::AccMeanAndVar) = acc.svar / (acc.nobs - 1)
+StatsBase.std(acc::AccMeanAndVar) = sqrt(acc.svar / (acc.nobs - 1))
+StatsBase.mean(acc::AccMeanAndStd) = acc.mean
+StatsBase.var(acc::AccMeanAndStd) = acc.svar / (acc.nobs - 1)
+StatsBase.std(acc::AccMeanAndStd) = sqrt(acc.svar / (acc.nobs - 1))
 
-StatsBase.mean(accum::AccStats{T}) where {T,F} = T(acc.m1)
-StatsBase.var(accum::AccStats{T}) where {T,F} = T(acc.m2 / (acc.nobs - 1))
-StatsBase.std(accum::AccStats{T}) where {T,F} = T(sqrt(var(accum)))
-StatsBase.skewness(accum::AccStats{T}) where {T,F} = T(sqrt(acc.nobs) * acc.m3 / (acc.m2 * sqrt(acc.m2)))
-StatsBase.kurtosis(accum::AccStats{T}) where {T,F} = T( ((acc.nobs * acc.m4) / (acc.m2^2)) - 3)
+StatsBase.mean(acc::AccStats{T}) where {T,F} = T(acc.m1)
+StatsBase.var(acc::AccStats{T}) where {T,F} = T(acc.m2 / (acc.nobs - 1))
+StatsBase.std(acc::AccStats{T}) where {T,F} = T(sqrt(var(acc)))
+StatsBase.skewness(acc::AccStats{T}) where {T,F} = T(sqrt(acc.nobs) * acc.m3 / (acc.m2 * sqrt(acc.m2)))
+StatsBase.kurtosis(acc::AccStats{T}) where {T,F} = T( ((acc.nobs * acc.m4) / (acc.m2^2)) - 3)
 
 
 
