@@ -15,7 +15,7 @@ mutable struct AccCount{T,F} <: Accumulator{T,F}
 end
 
 function AccCount(::Type{T}=Int64) where {T,F}
-     AccCount{T,F}(zero(T))
+     AccCount{T,F}(zero(commontype(T)))
 end
 
 function (acc::AccCount{T,F})() where {T,F}
@@ -23,7 +23,7 @@ function (acc::AccCount{T,F})() where {T,F}
 end
      
 function (acc::AccCount{T,F})(x::T) where {T,F}
-    acc.nobs += one(I)
+    acc.nobs += one(commontype(T))
     acc
 end
 
@@ -165,7 +165,7 @@ mutable struct AccSum{T,F} <: Accumulator{T,F}
 end
 
 function AccSum(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccSum{T,F}(0, zero(T), fn)
+     AccSum{T,F}(0, zero(commontype(T)), fn)
 end
 
 function (acc::AccSum{T,F})() where {T,F}
@@ -196,7 +196,7 @@ mutable struct AccProd{T,F} <: Accumulator{T,F}
 end
 
 function AccProd(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccProd{T,F}(0, one(T), fn)
+     AccProd{T,F}(0, one(commontype(T)), fn)
 end
 
 function (acc::AccProd{T,F})() where {T,F}
@@ -227,7 +227,7 @@ mutable struct AccMean{T,F} <: Accumulator{T,F}
 end
 
 function AccMean(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccMean{T,F}(0, zero(T), fn)
+     AccMean{T,F}(0, zero(commontype(T)), fn)
 end
 
 function (acc::AccMean{T,F})() where {T,F}
@@ -258,7 +258,7 @@ mutable struct AccGeoMean{T,F} <: Accumulator{T,F}
 end
 
 function AccGeoMean(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccGeoMean{T,F}(0, zero(T), fn)
+     AccGeoMean{T,F}(0, zero(commontype(T)), fn)
 end
 
 function (acc::AccGeoMean{T,F})() where {T,F}
@@ -288,7 +288,7 @@ mutable struct AccHarmMean{T,F} <: Accumulator{T,F}
 end
 
 function AccHarmMean(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccHarmMean{T,F}(0, zero(T), fn)
+     AccHarmMean{T,F}(0, zero(commontype(T)), fn)
 end
 
 function (acc::AccHarmMean{T,F})() where {T,F}
@@ -299,7 +299,7 @@ end
 function (acc::AccHarmMean{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
-    acc.invhmean += one(T) / xx
+    acc.invhmean += one(commontype(T)) / xx
     acc
 end
 
@@ -321,7 +321,7 @@ mutable struct AccGenMean{T,F} <: Accumulator{T,F}
 end
 
 function AccGenMean(::Type{T}=AccNum; fn::F=identity, power::Real=2.0) where {T,F}
-    AccGenMean{T,F}(0, zero(T), T(power), T(1/power), fn)
+    AccGenMean{T,F}(0, zero(commontype(T)), T(power), T(1/power), fn)
 end
 
 function (acc::AccGenMean{T,F})() where {T,F}
@@ -354,7 +354,7 @@ mutable struct AccMeanAndVar{T,F} <: Accumulator{T,F}
 end
 
 function AccMeanAndVar(::Type{T}=Float64; fn::F=identity) where {T,F}
-    AccMeanAndVar{T,F}(0, zero(T), zero(T), fn)
+    AccMeanAndVar{T,F}(0, zero(commontype(T)), zero(commontype(T)), fn)
 end
 
 function (acc::AccMeanAndVar{T,F})() where {T,F}
@@ -389,7 +389,7 @@ mutable struct AccMeanAndStd{T,F} <: Accumulator{T,F}
 end
 
 function AccMeanAndStd(::Type{T}=Float64; fn::F=identity) where {T,F}
-    AccMeanAndStd{T,F}(0, zero(T), zero(T), fn)
+    AccMeanAndStd{T,F}(0, zero(commontype(T)), zero(commontype(T)), fn)
 end
 
 function (acc::AccMeanAndStd{T,F})() where {T,F}
@@ -428,7 +428,7 @@ mutable struct AccStats{T,F} <: Accumulator{T,F}
 end
 
 AccStats(::Type{T}=Float64; fn::F=identity) where {T,F} =
-    AccStats(0, zero(T), zero(T), zero(T), zero(T), fn)
+    AccStats(0, zero(commontype(T)), zero(commontype(T)), zero(commontype(T)), zero(commontype(T)), fn)
 
 function (acc::AccStats{T,F})() where {T,F}
     (nobs=nobs(acc), mean=mean(acc), var=var(acc), std=std(acc), skewness=skewness(acc), kurtosis=kurtosis(acc))
@@ -472,7 +472,7 @@ mutable struct AccExpWtMean{T,F} <: Accumulator{T,F}
 end
 
 AccExpWtMean(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
-    AccExpWtMean{T,F}(0, T(alpha), zero(T), fn)
+    AccExpWtMean{T,F}(0, T(alpha), zero(commontype(T)), fn)
 
 (acc::AccExpWtMean{T,F})() where {T,F} = acc.expwtmean
 
@@ -499,7 +499,7 @@ mutable struct AccExpWtMeanVar{T,F} <: Accumulator{T,F}
 end
 
 AccExpWtMeanVar(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
-    AccExpWtMeanVar(0, alpha, zero(T), zero(T), fn)
+    AccExpWtMeanVar(0, alpha, zero(commontype(T)), zero(commontype(T)), fn)
 
 function(acc::AccExpWtMeanVar{T,F})() where {T,F}
     unbiased_expwtvar = acc.expwtsvar / (acc.nobs - 1)
@@ -512,7 +512,7 @@ function (acc::AccExpWtMeanVar{T,F})(x) where {T,F}
     diff = xx - acc.expwtmean
     incr = acc.alpha * diff
     acc.expwtmean += acc.alpha * (xx - acc.expwtmean)
-    acc.expwtsvar = (one(T) - acc.alpha) * (acc.expwtsvar + diff * incr)
+    acc.expwtsvar = (one(commontype(T)) - acc.alpha) * (acc.expwtsvar + diff * incr)
     acc
 end
 
@@ -532,7 +532,7 @@ mutable struct AccExpWtMeanStd{T,F} <: Accumulator{T,F}
 end
 
 AccExpWtMeanStd(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
-    AccExpWtMeanStd(0, alpha, zero(T), zero(T), fn)
+    AccExpWtMeanStd(0, alpha, zero(commontype(T)), zero(commontype(T)), fn)
 
 function(acc::AccExpWtMeanStd{T,F})() where {T,F}
     unbiased_expwtstd = sqrt(acc.expwtsvar / (acc.nobs - 1))
@@ -545,7 +545,7 @@ function (acc::AccExpWtMeanStd{T,F})(x) where {T,F}
     diff = xx - acc.expwtmean
     incr = acc.alpha * diff
     acc.expwtmean += acc.alpha * (xx - acc.expwtmean)
-    acc.expwtsvar = (one(T) - acc.alpha) * (acc.expwtsvar + diff * incr)
+    acc.expwtsvar = (one(commontype(T)) - acc.alpha) * (acc.expwtsvar + diff * incr)
     acc
 end
 
@@ -587,5 +587,4 @@ StatsBase.var(acc::AccStats{T}) where {T,F} = T(acc.m2 / (acc.nobs - 1))
 StatsBase.std(acc::AccStats{T}) where {T,F} = T(sqrt(var(acc)))
 StatsBase.skewness(acc::AccStats{T}) where {T,F} = T(sqrt(acc.nobs) * acc.m3 / (acc.m2 * sqrt(acc.m2)))
 StatsBase.kurtosis(acc::AccStats{T}) where {T,F} = T( ((acc.nobs * acc.m4) / (acc.m2^2)) - 3)
-
 
