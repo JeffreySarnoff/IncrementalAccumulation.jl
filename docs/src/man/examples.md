@@ -23,11 +23,11 @@ count_minimums = acc.nmin
 count_observations = acc.nobs
 ```
 
-### Rolling std over abs.(Float32s)
+### Rolling meanabs over Float32s
 ```
 fnx(x) = abs(x)
 
-acc = AccStd(Float32; fn=fnx)
+acc = AccMean(Float32; fn=fnx)
 ```
 
 #### this is the way to get each new result
@@ -44,7 +44,7 @@ acc(data)
 
 ##### either way gets you
 ```
-final_std = acc()
+final_mean = acc()
 count_observations = acc.nobs
 ```
 
