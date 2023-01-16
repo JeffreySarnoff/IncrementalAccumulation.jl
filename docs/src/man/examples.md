@@ -56,7 +56,6 @@ fnx(x; acc=acc) = ismissing(x) ? acc.min : x
 - missing replaced with zero
 ```
 fnx(x::T; acc=acc) where {T} = ismissing(x) ? zero(T) : x
-```
 
 acc = AccSum(Float32; fn=fnx)
 ```
