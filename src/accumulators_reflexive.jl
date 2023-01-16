@@ -52,7 +52,7 @@ end
 function (acc::AccMinimum{T,F})(x::T) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
-    if x < acc.min
+    if xx < acc.min
         acc.nmin += 1
         acc.min = xx
     end
