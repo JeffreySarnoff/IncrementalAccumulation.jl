@@ -51,30 +51,30 @@ count_observations = acc.nobs
 ### Rolling sum over Float32s with missings
 - missing replaced with prior sum
 ```
-fnx(x; acc=acc) = ismissing(x) ? acc.min : x
+fnx(x; acc=accsum) = ismissing(x) ? acc.min : x
 ```
 - missing replaced with zero
 ```
-fnx(x::T; acc=acc) where {T} = ismissing(x) ? zero(T) : x
+fnx(x::T; acc=accsum) where {T} = ismissing(x) ? zero(T) : x
 
-acc = AccSum(Float32; fn=fnx)
+accsum = AccSum(Float32; fn=fnx)
 ```
 
 #### this is the way to get each new result
 ```
 results = similar(data)
 @inbounds for i in eachindex(data)
-    results[i] = acc(data[i])()
+    results[i] = accsum(data[i])()
 end
 ```
 #### this is the way to get the final result only
 ```
-acc(data)
+accsum(data)
 ```
 
 ##### either way gets you
 ```
-final_sum = acc()
-count_observations = acc.nobs
+final_sum = accsum()
+count_observations = accsum.nobs
 ```
 
