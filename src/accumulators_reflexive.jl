@@ -42,7 +42,7 @@ mutable struct AccMinimum{T,F} <: Accumulator{T,F}
 end
 
 function AccMinimum(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccMinimum{T,F}(0, 0, typemax(T), fn)
+     AccMinimum{T,F}(0, 0, typemax(commontype(T)), fn)
 end
 
 function (acc::AccMinimum{T,F})() where {T,F}
@@ -80,7 +80,7 @@ mutable struct AccMaximum{T,F} <: Accumulator{T,F}
 end
 
 function AccMaximum(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccMaximum{T,F}(0, 0, typemin(T), fn)
+     AccMaximum{T,F}(0, 0, typemin(commontype(T)), fn)
 end
 
 function (acc::AccMaximum{T,F})() where {T,F}
@@ -120,7 +120,7 @@ mutable struct AccExtrema{T,F} <: Accumulator{T,F}
 end
 
 function AccExtrema(::Type{T}=AccNum; fn::F=identity) where {T,F}
-     AccExtrema{T,F}(0, 0, 0, typemax(T), typemin(T), fn)
+     AccExtrema{T,F}(0, 0, 0, typemax(commontype(T)), typemin(commontype(T)), fn)
 end
 
 function (acc::AccExtrema{T,F})() where {T,F}
