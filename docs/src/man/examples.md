@@ -52,12 +52,16 @@ count_observations = acc.nobs
 - missing replaced with prior sum
 ```
 fnx(x; acc=accsum) = ismissing(x) ? acc.sum : x
+accsum = AccSum(Float32; fn=fnx))
+# or (either way, the name assigned to the accumulator must appear in the fn)
+accsum = AccSum(Float32; fn=x->ismissing(x) ? accsum.sum : x))
 ```
 - missing replaced with zero
 ```
 fnx(x::T; acc=accsum) where {T} = ismissing(x) ? zero(T) : x
-
-accsum = AccSum(Float32; fn=fnx)
+accsum = AccSum(Float32; fn=fnx))
+# or (either way, the name assigned to the accumulator must appear in the fn)
+accsum = AccSum(Float32; fn=x->ismissing(x) ? zero(Float32) : x))
 ```
 
 #### this is the way to get each new result
