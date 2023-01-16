@@ -51,7 +51,7 @@ count_observations = acc.nobs
 ### Rolling sum over Float32s with missings
 - missing replaced with prior sum
 ```
-fnx(x; acc=accsum) = ismissing(x) ? acc.min : x
+fnx(x; acc=accsum) = ismissing(x) ? acc.sum : x
 ```
 - missing replaced with zero
 ```
