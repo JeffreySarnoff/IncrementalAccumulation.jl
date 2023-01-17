@@ -3,7 +3,7 @@
 These incremental accumulators of StatsBase functions are predefined:
 
 | accumulator   | incremental    | statistic                |
-|---------------|----------------|--------------------------|
+|:--------------|:---------------|:-------------------------|
 | AccCount      | count          | number of observations   |
 | AccMinimum    | `minimum`      | running minimum          |
 | AccMaximum    | `maximum`      | maximum                  |
@@ -20,13 +20,13 @@ These incremental accumulators of StatsBase functions are predefined:
 
 These additional incremental accumulators are predefined:
 
-| accumulator        | statistic                              |
-|--------------------|----------------------------------------|
-| AccExpWtMean       | exponentially weighted mean            |
-|                    |                                        |
-| *multivalued*      |                                        |
-| AccExpWtMeanAndVar | exponentially weighted mean and var    |
-| AccExpWtMeanAndStd | exponentially weighted mean and std    |
+| accumulator        | statistic                                    |
+|:-------------------|:---------------------------------------------|
+| AccExpWtMean       | exponentially weighted mean                  |
+|                    |                                              |
+| *multivalued*      |                                              |
+| AccExpWtMeanAndVar | exponentially weighted mean and var          |
+| AccExpWtMeanAndStd | exponentially weighted mean and std          |
 | AccStats           | (; nobs, mean, var, std, skewness, kurtosis) |
 
 
