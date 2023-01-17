@@ -1,5 +1,9 @@
 # examples.md
 
+```
+fna(x, s) = ismissing(x) ? s() : x
+accsum = AccSum(Union{Missing,Int}; fn=x->fna(x, accsum))
+```
 ## Rolling minimum over Float32s
 ```
 acc = AccMinimum(Float32)
