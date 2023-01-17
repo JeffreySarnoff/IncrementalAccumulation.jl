@@ -27,6 +27,14 @@ macro assignsym(x)
   end
 end
 
+macro assignacc(Acc, T)
+  quote
+    local accum = @lcsymbol($Acc)
+    local Accum = $Acc
+    accum = Accum($T; fn=x->fna(x, $esc(accum)))
+  end
+end
+
 ```
 ## Rolling minimum over Float32s
 ```
