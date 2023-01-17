@@ -6,9 +6,13 @@ makedocs(
     authors = ["Jeffrey Sarnoff <jeffrey.sarnoff@gmail.com>", "and contributors"],
     pages = [
         "Home" => "index.md",
+        "Guide" => Any[
+            "guide/guide.md",
+            "Examples" => "guide/examples.md",
+        ],
         "Manual" => Any[
-            "Guide" => "man/guide.md",
-            "man/examples.md",
+            "man/predefined.md",
+            "man/rollandrun.md",
         ],
         "contributing.md",
         "citing.md",
