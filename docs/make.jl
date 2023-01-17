@@ -1,9 +1,8 @@
-using Documenter, DocumenterTools, IncrementalAccumulators
+using Documenter
 
 makedocs(
-    modules = [IncrementalAccumulators],
     sitename = "IncrementalAccumulators.jl",
-    authors = ["Jeffrey Sarnoff <jeffrey.sarnoff@gmail.com>", "other contributors"],
+    authors = "Jeffrey Sarnoff and other contributors",
     format=Documenter.HTML(
         # Use clean URLs, unless built as a "local" build
         prettyurls=!("local" in ARGS),
@@ -29,4 +28,3 @@ deploydocs(
     repo = "github.com/JeffreySarnoff/IncrementalAccumulators.jl.git",
     target = "build"
 )
-
