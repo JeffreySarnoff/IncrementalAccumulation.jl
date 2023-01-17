@@ -3,6 +3,30 @@
 ```
 fna(x, s) = ismissing(x) ? s() : x
 accsum = AccSum(Union{Missing,Int}; fn=x->fna(x, accsum))
+
+
+macro string(x)
+    :($(esc(string(x))))
+end
+
+macro lcstring(x)
+    :($(esc(lowercase(string(x)))))
+end
+
+macro symbol(x)
+    Symbol(@string($x))
+end
+
+macro lcsymbol(x)
+    :(Symbol(@lcstring($x)))
+end
+
+macro assignsym(x)
+  quote
+    $(esc(x)) = AccSum(Union{Missing,Int}; fn=x->fna(x,$(esc(x))))
+  end
+end
+
 ```
 ## Rolling minimum over Float32s
 ```
