@@ -30,4 +30,4 @@ julia> result = accumulate(accsum, xs)
  ```
  
 Note that using `eltype(xs)` where xs are Ints will not work where the function generates floats.
-In such cases, using `Acc_()` will default to `Float64` and using `Acc_(Float32)` will use `Float32`s.
+In such cases, using `Acc_()` will default to `Float64` and using `Acc_(Float32)` will use `Float32s`.
