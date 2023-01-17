@@ -4,7 +4,7 @@
      AccSum, AccProd,
      AccMean, AccGeoMean, AccHarmMean, AccGenMean,
      AccMeanAndVar, AccMeanAndStd, AccStats,
-     AccExpWtMean, AccExpWtMeanVar, AccExpWtMeanStd
+     AccExpWtMean, AccExpWtMeanAndVar, AccExpWtMeanAndStd
 =#
 
 # Count
@@ -490,7 +490,7 @@ function (acc::AccExpWtMean{T,F})(xs::Seq{T}) where {T,F}
     acc
 end
 
-mutable struct AccExpWtMeanVar{T,F} <: Accumulator{T,F}
+mutable struct AccExpWtMeanAndVar{T,F} <: Accumulator{T,F}
     nobs::Int
     alpha::T
     expwtmean::T
@@ -498,15 +498,15 @@ mutable struct AccExpWtMeanVar{T,F} <: Accumulator{T,F}
     fn::F
 end
 
-AccExpWtMeanVar(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
-    AccExpWtMeanVar(0, alpha, zero(commontype(T)), zero(commontype(T)), fn)
+AccExpWtMeanAndVar(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
+    AccExpWtMeanAndVar(0, alpha, zero(commontype(T)), zero(commontype(T)), fn)
 
-function(acc::AccExpWtMeanVar{T,F})() where {T,F}
+function(acc::AccExpWtMeanAndVar{T,F})() where {T,F}
     unbiased_expwtvar = acc.expwtsvar / (acc.nobs - 1)
     (expwt_mean=acc.expwtmean, expwt_var=unbiased_expwtvar)
 end
 
-function (acc::AccExpWtMeanVar{T,F})(x) where {T,F}
+function (acc::AccExpWtMeanAndVar{T,F})(x) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     diff = xx - acc.expwtmean
@@ -516,14 +516,14 @@ function (acc::AccExpWtMeanVar{T,F})(x) where {T,F}
     acc
 end
 
-function (acc::AccExpWtMeanVar{T,F})(xs::Seq{T}) where {T,F}
+function (acc::AccExpWtMeanAndVar{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
         acc(xs[i])
     end
     acc
 end
 
-mutable struct AccExpWtMeanStd{T,F} <: Accumulator{T,F}
+mutable struct AccExpWtMeanAndStd{T,F} <: Accumulator{T,F}
     nobs::Int
     alpha::T
     expwtmean::T
@@ -531,15 +531,15 @@ mutable struct AccExpWtMeanStd{T,F} <: Accumulator{T,F}
     fn::F
 end
 
-AccExpWtMeanStd(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
-    AccExpWtMeanStd(0, alpha, zero(commontype(T)), zero(commontype(T)), fn)
+AccExpWtMeanAndStd(::Type{T}=Float64; alpha::T=T(0.5), fn::F=identity) where {T,F} =
+    AccExpWtMeanAndStd(0, alpha, zero(commontype(T)), zero(commontype(T)), fn)
 
-function(acc::AccExpWtMeanStd{T,F})() where {T,F}
+function(acc::AccExpWtMeanAndStd{T,F})() where {T,F}
     unbiased_expwtstd = sqrt(acc.expwtsvar / (acc.nobs - 1))
     (expwt_mean=acc.expwtmean, expwt_std=unbiased_expwtstd)
 end
 
-function (acc::AccExpWtMeanStd{T,F})(x) where {T,F}
+function (acc::AccExpWtMeanAndStd{T,F})(x) where {T,F}
     xx = acc.fn(x)
     acc.nobs += 1
     diff = xx - acc.expwtmean
@@ -549,7 +549,7 @@ function (acc::AccExpWtMeanStd{T,F})(x) where {T,F}
     acc
 end
 
-function (acc::AccExpWtMeanStd{T,F})(xs::Seq{T}) where {T,F}
+function (acc::AccExpWtMeanAndStd{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
         acc(xs[i])
     end
