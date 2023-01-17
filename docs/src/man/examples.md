@@ -35,6 +35,8 @@ macro assignacc(Acc, T)
   end
 end
 
+ @assignacc(AccSum, Int) # generates accsum
+ 
 ```
 ## Rolling minimum over Float32s
 ```
