@@ -1,4 +1,27 @@
 ```
+
+julia> mat
+3×3 Matrix{Int64}:
+ 1  4  7
+ 2  5  8
+ 3  6  9
+
+julia> 7+8+9
+24
+
+julia> accsum1 = AccSum(Int); accsum2 = AccSum(Int); accsum3 = AccSum(Int); accsums = (accsum1, accsum2, accsum3);
+
+julia> map((acc,col)->map(acc,col), accsums, cols)
+3-element Vector{Vector{AccSum{Int64, typeof(identity)}}}:
+ [AccSum{Int64, typeof(identity)}(3, 6, identity), AccSum{Int64, typeof(identity)}(3, 6, identity), AccSum{Int64, typeof(identity)}(3, 6, identity)]
+ [AccSum{Int64, typeof(identity)}(3, 15, identity), AccSum{Int64, typeof(identity)}(3, 15, identity), AccSum{Int64, typeof(identity)}(3, 15, identity)]
+ [AccSum{Int64, typeof(identity)}(3, 24, identity), AccSum{Int64, typeof(identity)}(3, 24, identity), AccSum{Int64, typeof(identity)}(3, 24, identity)]
+
+julia> accsums[3]()
+24
+```
+
+```
 missing_to_last(x, s) = ismissing(x) ? s() : x
 missing_to_zero(x, s) = ismissing(x) ? zero(x) : x
 missing_to_one(x, s) = ismissing(x) ? one(x) : x
