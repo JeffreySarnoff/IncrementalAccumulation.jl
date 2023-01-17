@@ -1,8 +1,17 @@
 # examples.md
 
 ```
-fna(x, s) = ismissing(x) ? s() : x
+missing_to_last(x, s) = ismissing(x) ? s() : x
+missing_to_zero(x, s) = ismissing(x) ? zero(x) : x
+missing_to_one(x, s) = ismissing(x) ? one(x) : x
+
+nan_to_last(x, s) = isnan(x) ? s() : x
+nan_to_zero(x, s) = isnan(x) ? zero(x) : x
+
+to_last(x, s) = ismissing(x) || isnan(x) ? s() : x
+
 accsum = AccSum(Union{Missing,Int}; fn=x->fna(x, accsum))
+accstd = AccStd(Union{Missing,Float32}; fn=x->fna(x, accstd))
 
 
 macro string(x)
