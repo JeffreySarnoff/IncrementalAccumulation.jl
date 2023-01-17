@@ -6,7 +6,7 @@ export Accumulator, Seq, seq,
        AccSum, AccProd,
        AccMean, AccGeoMean, AccHarmMean, AccGenMean,
        AccMeanAndVar, AccMeanAndStd, AccStats,
-       AccExpWtMean, AccExpWtMeanVar, AccExpWtMeanStd
+       AccExpWtMean, AccExpWtMeanAndVar, AccExpWtMeanAndStd
 
 # external packages
 
