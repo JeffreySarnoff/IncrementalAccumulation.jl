@@ -3,7 +3,7 @@
 To obtain the result of a predefined incremental statistic over some vector v
 ```
 xs = collect(1:10);
-accsum = AccSum(eltype(v))
+accsum = AccSum(eltype(xs))
 
 function accumulate(acc, xs)
     result = Vector{eltype(xs)}(undef, length(xs))
