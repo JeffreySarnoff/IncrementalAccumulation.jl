@@ -3,7 +3,13 @@ using Documenter, DocumenterTools, IncrementalAccumulators
 makedocs(
     modules = [IncrementalAccumulators],
     sitename = "IncrementalAccumulators.jl",
-    authors = ["Jeffrey Sarnoff <jeffrey.sarnoff@gmail.com>", "and contributors"],
+    authors = ["Jeffrey Sarnoff <jeffrey.sarnoff@gmail.com>", "other contributors"],
+    format=Documenter.HTML(
+        # Use clean URLs, unless built as a "local" build
+        prettyurls=!("local" in ARGS),
+        highlights=["yaml"],
+        ansicolor=true,
+    ),
     pages = [
         "Home" => "index.md",
         "Guide" => Any[
@@ -22,6 +28,5 @@ makedocs(
 deploydocs(
     repo = "github.com/JeffreySarnoff/IncrementalAccumulators.jl.git",
     target = "build"
-    push_preview = true,
 )
 
