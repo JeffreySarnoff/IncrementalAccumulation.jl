@@ -315,8 +315,8 @@ end
 mutable struct AccGenMean{T,F} <: Accumulator{T,F}
     nobs::Int       # count each observation
     gmean::T        # current mean((xᵢ)ᵖʷʳ), i=1:nobs
-    const pwr::T    # power
-    const rpwr::T   # reciprocal of power
+    pwr::T          # power (could be const)
+    rpwr::T         # reciprocal of power (could be const)
     fn::F
 end
 
