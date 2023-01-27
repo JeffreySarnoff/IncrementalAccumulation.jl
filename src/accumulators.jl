@@ -14,7 +14,7 @@ mutable struct AccCount{T,F} <: Accumulator{T,F}
     fn::F           # preapply to each element when observed
 end
 
-function AccCount(::Type{T}=Int64) where {T,F}
+function AccCount(::Type{T}=Int64, F) where {T,F}
      AccCount{T,F}(zero(commontype(T)))
 end
 
@@ -27,7 +27,7 @@ function (acc::AccCount{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccCount{T,T})(xs::Seq1{T}) where {T,F}
+function (acc::AccCount{T,F})(xs::Seq1{T}) where {T,F}
     acc.nobs += length(xs)
     acc
 end
@@ -582,11 +582,11 @@ StatsBase.mean(acc::AccMeanAndStd) = acc.mean
 StatsBase.var(acc::AccMeanAndStd) = acc.svar / (acc.nobs - 1)
 StatsBase.std(acc::AccMeanAndStd) = sqrt(acc.svar / (acc.nobs - 1))
 
-StatsBase.mean(acc::AccStats{T}) where {T,F} = T(acc.m1)
-StatsBase.var(acc::AccStats{T}) where {T,F} = T(acc.m2 / (acc.nobs - 1))
-StatsBase.std(acc::AccStats{T}) where {T,F} = T(sqrt(var(acc)))
-StatsBase.skewness(acc::AccStats{T}) where {T,F} = T(sqrt(acc.nobs) * acc.m3 / (acc.m2 * sqrt(acc.m2)))
-StatsBase.kurtosis(acc::AccStats{T}) where {T,F} = T( ((acc.nobs * acc.m4) / (acc.m2^2)) - 3)
+StatsBase.mean(acc::AccStats{T,F}) where {T,F} = T(acc.m1)
+StatsBase.var(acc::AccStats{T,F}) where {T,F} = T(acc.m2 / (acc.nobs - 1))
+StatsBase.std(acc::AccStats{T,F}) where {T,F} = T(sqrt(var(acc)))
+StatsBase.skewness(acc::AccStats{T,F}) where {T,F} = T(sqrt(acc.nobs) * acc.m3 / (acc.m2 * sqrt(acc.m2)))
+StatsBase.kurtosis(acc::AccStats{T,F}) where {T,F} = T( ((acc.nobs * acc.m4) / (acc.m2^2)) - 3)
 
 
 
