@@ -14,8 +14,8 @@ mutable struct AccCount{T,F} <: Accumulator{T,F}
     fn::F           # preapply to each element when observed
 end
 
-function AccCount(::Type{T}=Int64, F) where {T,F}
-     AccCount{T,F}(zero(commontype(T)))
+function AccCount(::Type{T}=Int64, fn::F=identity) where {T,F}
+     AccCount{T,F}(zero(commontype(T)), fn)
 end
 
 function (acc::AccCount{T,F})() where {T,F}
