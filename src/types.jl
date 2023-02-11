@@ -10,10 +10,10 @@ abstract type Accumulator{T,F} <: Function end
 #= ---- generalized sequence ---- =#
 
 """
-    Seq
+    MultiSeq
 """
-const Seq1 = Union{AbstractVector{T}, NTuple{N,T}} where {N,T}
-const Seq = Union{AbstractArray{T,N},NTuple{N,T}} where {N,T}
+const Seq = Union{AbstractVector{T}, NTuple{N,T}} where {N,T}
+const MultiSeq = Union{AbstractArray{T,N},NTuple{N,T}} where {N,T}
 
 """
     seq

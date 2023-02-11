@@ -27,7 +27,7 @@ function (acc::AccCount{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccCount{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccCount{T,F})(xs::Seq{T}) where {T,F}
     acc.nobs += length(xs)
     acc
 end
@@ -59,7 +59,7 @@ function (acc::AccMinimum{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccMinimum{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccMinimum{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     x = vminimum(xxs)
@@ -97,7 +97,7 @@ function (acc::AccMaximum{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccMaximum{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccMaximum{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     x = vmaximum(xxs)
@@ -141,7 +141,7 @@ function (acc::AccExtrema{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccExtrema{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccExtrema{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)     
     mn, mx = vextrema(xxs)
@@ -179,7 +179,7 @@ function (acc::AccSum{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccSum{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccSum{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     x = vsum(xxs)
@@ -210,7 +210,7 @@ function (acc::AccProd{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccProd{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccProd{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     x = vprod(xxs)
@@ -241,7 +241,7 @@ function (acc::AccMean{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccMean{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccMean{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     xmean = vmean(xxs)
@@ -273,7 +273,7 @@ function (acc::AccGeoMean{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccGeoMean{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccGeoMean{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     acc.sumlog += sum(map(logabs, xxs))
@@ -303,7 +303,7 @@ function (acc::AccHarmMean{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccHarmMean{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccHarmMean{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     acc.invhmean += sum(map(inv, xxs))
@@ -335,7 +335,7 @@ function (acc::AccGenMean{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccGenMean{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccGenMean{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)     
     xmean = vmean(map(x->x^acc.pwr, xxs))
@@ -371,7 +371,7 @@ function (acc::AccMeanAndVar{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccMeanAndVar{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccMeanAndVar{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     prior_mean = acc.mean
@@ -406,7 +406,7 @@ function (acc::AccMeanAndStd{T,F})(x::T) where {T,F}
     acc
 end
 
-function (acc::AccMeanAndStd{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccMeanAndStd{T,F})(xs::Seq{T}) where {T,F}
     xxs = map(acc.fn, xs)
     acc.nobs += length(xs)
     prior_mean = acc.mean
@@ -450,7 +450,7 @@ function (acc::AccStats{T,F})(x) where {T,F}
     acc.m2 += term1
 end
 
-function (acc::AccStats{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccStats{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
         acc(xs[i])
     end
@@ -483,7 +483,7 @@ function (acc::AccExpWtMean{T,F})(x) where {T,F}
     acc
 end
 
-function (acc::AccExpWtMean{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccExpWtMean{T,F})(xs::Seq{T}) where {T,F}
     for x in eachindex(xs)
         acc(xs[i])
     end
@@ -516,7 +516,7 @@ function (acc::AccExpWtMeanAndVar{T,F})(x) where {T,F}
     acc
 end
 
-function (acc::AccExpWtMeanAndVar{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccExpWtMeanAndVar{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
         acc(xs[i])
     end
@@ -549,7 +549,7 @@ function (acc::AccExpWtMeanAndStd{T,F})(x) where {T,F}
     acc
 end
 
-function (acc::AccExpWtMeanAndStd{T,F})(xs::Seq1{T}) where {T,F}
+function (acc::AccExpWtMeanAndStd{T,F})(xs::Seq{T}) where {T,F}
     for i in eachindex(xs)
         acc(xs[i])
     end

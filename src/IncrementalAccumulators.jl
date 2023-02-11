@@ -1,6 +1,6 @@
 module IncrementalAccumulators
 
-export Accumulator, Seq, seq,
+export Accumulator, MultiSeq, seq,
        AccCount, 
        AccMinimum, AccMaximum, AccExtrema, 
        AccSum, AccProd,
